@@ -1,0 +1,112 @@
+﻿<Window x:Class="AppLDODemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AppLDODemo"
+        mc:Ignorable="d"
+        Title="MVVM UI Large Database Operations Application" MinHeight="500" MinWidth="700" Height="500" Width="800" Background="White">
+    <Window.Resources>
+        <XmlDataProvider x:Key="Views">
+            <x:XData>
+                <Views xmlns="">
+                    <View Title="Welcome">
+                        <Page Source="Views\ViewWelcome.xaml" />
+                    </View>
+                    <View Title="Write to Database">
+                        <Page Source="Views\ViewWrite.xaml" />
+                    </View>
+                    <View Title="Read from Database">
+                        <Page Source="Views\ViewRead.xaml" />
+                    </View>
+                </Views>
+            </x:XData>
+        </XmlDataProvider>
+        <Storyboard x:Key="ShowLoadingNotification" Completed="ShowLoadingNotification_Completed">
+            <ThicknessAnimation Storyboard.TargetProperty="Padding" From="0,90,0,0" To="0,0,0,0" DecelerationRatio=".2" Duration="0:0:2" />
+        </Storyboard>
+        <Storyboard x:Key="HideLoadingNotification">
+            <ThicknessAnimation Storyboard.TargetProperty="Padding" From="0,0,0,0" To="0,90,0,0" AccelerationRatio=".2" Duration="0:0:0.500" />
+        </Storyboard>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label Foreground="White" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Background="#FF5B5B5B">MVVM UI Large Database Operation Dummy Test</Label>
+            <Label Foreground="White" Grid.Row="1" VerticalAlignment="Center" Background="#FF8D8D8D">1 Million+ Records</Label>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="65px" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <ListBox x:Name="viewList" SelectedIndex="0" ItemContainerStyle="{DynamicResource CustomListBoxItem}"
+                    ItemsSource="{Binding Source={StaticResource Views}, XPath=Views/View}"
+                    DisplayMemberPath="@Title" Background="Transparent" BorderThickness="0" Padding="0" Margin="0"
+                         FontWeight="Bold" FontSize="18px" Foreground="White" >
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding ElementName=Views, Path=Children.Count}" Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightColor}" Color="#FF8D8D8D" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveBorderColor}" Color="#FF5B5B5B" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextColor}" Color="WhiteSmoke" />
+                    </ListBox.Resources>
+                </ListBox>
+            </Grid>
+            <Grid Grid.Row="0" Name="viewingGrid" Margin="30 30 30 30">
+                <ItemsControl DataContext="{Binding Path=SelectedItem, ElementName=viewList}"
+                    ItemsSource="{Binding XPath=Page}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Source="{Binding XPath=@Source}"
+                                   Width="{Binding ActualWidth, ElementName=viewingGrid}" 
+                                   Height="{Binding ActualHeight, ElementName=viewingGrid}" LoadCompleted="FrameLoadCompleted" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Grid Height="90" VerticalAlignment="Bottom" Name="loadingGrid" Margin="0">
+                    <ItemsControl Padding="0 90 0 0" Name="LoadingControl">
+                        <ItemsControl.Items>
+                            <Frame Name="LoadingFrame" Source="Views\ViewLoading.xaml"
+                                   Width="{Binding ActualWidth, ElementName=loadingGrid}" 
+                                   Height="{Binding ActualHeight, ElementName=loadingGrid}" />
+                        </ItemsControl.Items>
+                        <ItemsControl.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <StaticResource ResourceKey="ShowLoadingNotification"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <StaticResource ResourceKey="HideLoadingNotification"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Style>
+                    </ItemsControl>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

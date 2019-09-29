@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="AppLDODemo.Views.ViewRead"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AppLDODemo.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="400" Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40px" />
+            <RowDefinition Height="50px" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Label Content="{Binding StatusUpdate}" Background="Black" Foreground="White" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"></Label>
+        </Grid>
+
+        <Label Grid.Row="1" Content="Read Operation" HorizontalAlignment="Center" Margin="0 0 0 10" VerticalAlignment="Bottom" FontSize="25" FontWeight="Bold"></Label>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="400px"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1">
+                <DataGrid ColumnWidth="*" Name="dataGrid" ItemsSource="{Binding AccountList}" VerticalAlignment="Top" FontSize="14"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

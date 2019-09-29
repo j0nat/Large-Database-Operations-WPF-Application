@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="AppLDODemo.Views.ViewWrite"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:AppLDODemo.Converters"
+             mc:Ignorable="d" d:DesignWidth="772" d:DesignHeight="583" Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40px" />
+            <RowDefinition Height="50px" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0 0 0 10">
+            <Label Content="{Binding StatusUpdate}" HorizontalAlignment="Left" FontSize="14"
+                   FontWeight="Regular" Foreground="White" Background="#FF8D8D8D" Padding="20 5 15 5"></Label>
+        </Grid>
+        <Label Grid.Row="0" BorderThickness="10 0 0 0" Margin="0 0 0 10" BorderBrush="#FF5B5B5B"></Label>
+        
+        <Label Grid.Row="1" Content="Write Operation" HorizontalAlignment="Center" Margin="0 0 0 10" VerticalAlignment="Bottom" FontSize="25" FontWeight="Bold"></Label>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="300px"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25px" />
+                <RowDefinition Height="25px" />
+                <RowDefinition Height="25px" />
+                <RowDefinition Height="45px" />
+                <RowDefinition Height="45px" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <converters:NumberConverter x:Key="NumberConverter"/>
+            </Grid.Resources>
+            <Label Grid.Row="1" Grid.Column="0" Content="Number of Records:" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0 0 10 5" FontSize="16"/>
+            <Grid Grid.Row="1" Grid.Column="1" Name="RecordAmountValueTextBoxGrid">
+                <TextBox Name="TextBoxRecordAmountValue" Width="{Binding ActualWidth, ElementName=RecordAmountValueTextBoxGrid}" BorderThickness="0 0 0 2" HorizontalAlignment="Right" Text="{Binding RecordAmountValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource NumberConverter}}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MaxLength="10" PreviewTextInput="NumberValidationTextBox" FontSize="18" FontWeight="Bold" FontFamily="Courier New" />
+            </Grid>
+            <Button Grid.Row="3" Grid.Column="1" Margin="1" Content="Generate Dummy Data" Name="GenerateDummyData" Command="{Binding GenerateDummyDataCommand}" Cursor="Hand" Background="#FFDEDEDE" Foreground="Black" BorderThickness="0" />
+            <Button Grid.Row="4" Grid.Column="1" Margin="1" Content="Delete Dummy Data" Name="DeleteDummyData" Command="{Binding DeleteDummyDataCommand}" Cursor="Hand" Background="#FFDEDEDE" Foreground="Black" BorderThickness="0" />
+        </Grid>
+    </Grid>
+</UserControl>
